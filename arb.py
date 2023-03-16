@@ -2,6 +2,8 @@ import json
 
 import requests
 
+DB_LINK = "NDhqybgYBJYIbHFAh1PQB"
+
 
 def get_addresses(path: str = 'address.txt') -> list:
     with open(path) as file:
@@ -10,7 +12,7 @@ def get_addresses(path: str = 'address.txt') -> list:
 
 
 def get_token(address: str) -> float:
-    response = session.get(url=f"https://arbitrum.foundation/_next/data/lB0zTjQwwi0nJOMcTT0Td/eligibility.json?"
+    response = session.get(url=f"https://arbitrum.foundation/_next/data/{DB_LINK}/eligibility.json?"
                                f"address={address.lower()}")
     result = json.loads(response.content)['pageProps']
     if result['isEligible']:
