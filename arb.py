@@ -9,18 +9,18 @@ def get_addresses(path: str = 'address.txt') -> list:
     return [line.rstrip() for line in lines]
 
 
-def get_token(address: str):
+def get_token(address: str) -> float:
     response = session.get(url=f"https://arbitrum.foundation/_next/data/lB0zTjQwwi0nJOMcTT0Td/eligibility.json?"
                                f"address={address.lower()}")
     result = json.loads(response.content)['pageProps']
     if result['isEligible']:
         return result['eligibility']['tokens']
     else:
-        return 0
+        return 0.0
 
 
 if __name__ == '__main__':
-    total_amount = 0
+    total_amount = 0.0
     session = requests.session()
     for address in get_addresses():
         amount = get_token(address=address)
