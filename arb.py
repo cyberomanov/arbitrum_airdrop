@@ -1,25 +1,23 @@
-import json
-
 import requests
-
-DB_LINK = "NDhqybgYBJYIbHFAh1PQB"
-
+import json
+from bs4 import BeautifulSoup
 
 def get_addresses(path: str = 'address.txt') -> list:
     with open(path) as file:
         lines = file.readlines()
     return [line.rstrip() for line in lines]
 
-
 def get_token(address: str) -> float:
-    response = session.get(url=f"https://arbitrum.foundation/_next/data/{DB_LINK}/eligibility.json?"
-                               f"address={address.lower()}")
-    result = json.loads(response.content)['pageProps']
+    url = "https://arbitrum.foundation/eligibility?address=" + str(address.lower())
+    request = requests.get(url).text
+    soup = BeautifulSoup(request,"html.parser")
+    script = soup.find('script',type="application/json")
+    my_json = str(script)[51:-9]
+    result = (json.loads(my_json)['props']['pageProps'])
     if result['isEligible']:
         return result['eligibility']['tokens']
     else:
         return 0.0
-
 
 if __name__ == '__main__':
     total_amount = 0.0
