@@ -2,7 +2,9 @@ import json
 
 import requests
 
-DB_LINK = "NDhqybgYBJYIbHFAh1PQB"
+import re
+get_db_value = requests.get("https://arbitrum.foundation/eligibility?address=0x0000000000000000000000000000000000000000")
+DB_LINK = re.search('buildId":"(.{21})"', get_db_value.text).group(1)
 
 
 def get_addresses(path: str = 'address.txt') -> list:
